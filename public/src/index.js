@@ -23,26 +23,11 @@ async function start() {
       // Import video routes
       const { upload, videoRouter } = require('./middleware/video.middleware');
       
-      // Set up video API endpoints
-      app.post('/api/videos/upload', upload.single('video'), (req, res) => {
-        return videoRouter(req, res);
-      });
+      // Set up Express app to use the video router
+      app.use('/api/videos', videoRouter);
       
-      app.get('/api/videos', (req, res) => {
-        return videoRouter(req, res);
-      });
-      
-      app.get('/api/videos/:id', (req, res) => {
-        return videoRouter(req, res);
-      });
-      
-      app.patch('/api/videos/:id/status', (req, res) => {
-        return videoRouter(req, res);
-      });
-      
-      app.delete('/api/videos/:id', (req, res) => {
-        return videoRouter(req, res);
-      });
+      // Serve static files from public directory
+      app.use(express.static(path.join(__dirname, 'public')));
       
       // Start the server
       const { listen } = require('payload/config');

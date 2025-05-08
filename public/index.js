@@ -1,16 +1,19 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.static(path.join(__dirname)));
 
 // Set up Payload CMS
-import { build as payloadBuild } from '@payloadcms/next';
+const { build } = require('@payloadcms/next');
 const payloadConfig = require('./src/config/payload.config.js');
+
 
 async function startServer() {
   try {
