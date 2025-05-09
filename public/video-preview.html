@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Preview</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      background-color: #2c3e50;
+      color: white;
+      padding: 15px 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+    
+    h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    
+    .video-container {
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+    
+    video {
+      width: 100%;
+      display: block;
+    }
+    
+    .video-info {
+      padding: 15px;
+    }
+    
+    .thumbnail-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    
+    img {
+      width: 100%;
+      display: block;
+    }
+    
+    .status-badge {
+      background-color: #2c3e50;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      margin-bottom: 15px;
+      display: inline-block;
+    }
+    
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+    
+    button:hover {
+      background-color: #2980b9;
+    }
+    
+    .metadata {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+    }
+    
+    .metadata-item {
+      margin-bottom: 10px;
+    }
+    
+    .metadata-label {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    
+    footer {
+      margin-top: 30px;
+      padding: 15px 0;
+      background-color: #2c3e50;
+      color: white;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <h1>Video Preview</h1>
+    </div>
+  </header>
+  
+  <div class="container">
+    <div class="thumbnail-container">
+      <img id="video-thumbnail" src="" alt="Video Thumbnail">
+    </div>
+    
+    <span id="status-badge" class="status-badge">Loading video...</span>
+    
+    <div class="controls">
+      <button id="play-pause-btn">Play</button>
+      <button id="download-btn">Download Proxy</button>
+      <button id="share-btn">Share</button>
+    </div>
+    
+    <div class="video-container">
+      <video id="video-player" controls>
+        Your browser does not support the video tag.
+      </video>
+      
+      <div class="video-info">
+        <h2 id="video-title"></h2>
+        <p id="video-description">Loading video information...</p>
+      </div>
+    </div>
+    
+    <div class="metadata">
+      <div class="metadata-item">
+        <span class="metadata-label">Duration:</span> 
+        <span id="video-duration"></span>
+      </div>
+      
+      <div class="metadata-item">
+        <span class="metadata-label">Resolution:</span> 
+        <span id="video-resolution"></span>
+      </div>
+      
+      <div class="metadata-item">
+        <span class="metadata-label">File Size:</span> 
+        <span id="video-size"></span>
+      </div>
+    </div>
+  </div>
+  
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Video Platform. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get video ID from URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const videoId = urlParams.get('id');
+      
+      if (!videoId) {
+        alert('No video ID provided');
+        window.location.href = '/';
+      }
+      
+      // Load video data
+      fetch(`/api/videos/${videoId}`)
+        .then(response => response.json())
+        .then(videoData => {
+          document.getElementById('video-title').textContent = videoData.title;
+          document.getElementById('video-description').textContent = 
+            'Proxy version of the original video for optimized playback.';
+          
+          // Set thumbnail
+          const thumbnailUrl = `/thumbnails/${videoId}.jpg`;
+          document.getElementById('video-thumbnail').src = thumbnailUrl;
+          
+          // Update metadata
+          document.getElementById('video-duration').textContent = videoData.duration || 'Unknown';
+          document.getElementById('video-resolution').textContent = 
+            videoData.resolution || 'Unknown';
+          document.getElementById('video-size').textContent = 
+            (videoData.fileSize ? `${(videoData.fileSize / 1024 / 1024).toFixed(2)} MB` : 'Unknown');
+          
+          // Set status
+          const statusBadge = document.getElementById('status-badge');
+          statusBadge.textContent = `Status: ${videoData.status}`;
+          
+          if (videoData.status === 'ready') {
+            statusBadge.style.backgroundColor = '#27ae60';
+          } else if (videoData.status === 'error') {
+            statusBadge.style.backgroundColor = '#e74c3c';
+          }
+        })
+        .catch(error => {
+          console.error('Error loading video data:', error);
+          document.getElementById('status-badge').textContent = 'Error loading video';
+          document.getElementById('status-badge').style.backgroundColor = '#e74c3c';
+        });
+      
+      // Load video file
+      const videoPlayer = document.getElementById('video-player');
+      fetch(`/api/videos/${videoId}/proxy`)
+        .then(response => {
+          if (!response.ok) throw new Error('Proxy video not available yet');
+          return response.json();
+        })
+        .then(proxyData => {
+          videoPlayer.src = proxyData.url;
+          
+          // Set up controls
+          const playPauseBtn = document.getElementById('play-pause-btn');
+          playPauseBtn.addEventListener('click', function() {
+            if (videoPlayer.paused) {
+              videoPlayer.play();
+              this.textContent = 'Pause';
+            } else {
+              videoPlayer.pause();
+              this.textContent = 'Play';
+            }
+          });
+          
+          // Download button
+          const downloadBtn = document.getElementById('download-btn');
+          downloadBtn.addEventListener('click', function() {
+            window.location.href = proxyData.url;
+          });
+          
+          // Share button
+          const shareBtn = document.getElementById('share-btn');
+          shareBtn.addEventListener('click', function() {
+            if (navigator.share) {
+              navigator.share({
+                title: 'Video Preview',
+                text: `Check out this video preview`,
+                url: window.location.href
+              }).catch(err => console.error('Error sharing:', err));
+            } else {
+              // Fallback for browsers that don't support the Web Share API
+              prompt('Copy this link to share:', window.location.href);
+            }
+          });
+        })
+        .catch(error => {
+          console.error('Error loading proxy video:', error);
+          document.getElementById('status-badge').textContent = 'Proxy video not available yet';
+          document.getElementById('status-badge').style.backgroundColor = '#f39c12';
+        });
+    });
+  </script>
+</body>
+</html>
