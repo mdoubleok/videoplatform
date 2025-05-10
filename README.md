@@ -5,7 +5,7 @@ A Reach Engine replacement using Payload CMS for video asset management.
 ## Features
 
 - Video upload with support for multiple formats
-- Automatic thumbnail generation (placeholder in this version)
+- Automatic thumbnail generation 
 - Video status tracking (processing, ready, error)
 - Search and filter functionality
 - Responsive admin interface

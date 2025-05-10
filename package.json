@@ -4,8 +4,10 @@
   "description": "A Reach Engine replacement using Payload CMS for video asset management",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+      "start": "node scripts/initServices.js && node index.js",
+      "dev": "export PAYLOAD_PORT=3000 && node scripts/initServices.js && node index.js",
+      "server-start": "node server/index.js",
+      "dev-nodemon": "nodemon index.js"
   },
   "dependencies": {
     "express": "^4.17.1",

@@ -1,7 +1,7 @@
-import path from 'path';
-import { buildSchema } from 'payload/config';
+const path = require('path');
+const { buildSchema } = require('payload/config');
 
-export default buildSchema({
+module.exports = buildSchema({
   name: 'video-engine',
   collections: [
     {

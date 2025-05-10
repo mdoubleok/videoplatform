@@ -11,6 +11,14 @@ class VideoController {
    * @param {Object} res - Express response object
    */
   async uploadVideo(req, res) {
+// Add debug logging
+console.log('Initializing VideoController with:', {
+  payloadUrl: process.env.PAYLOAD_URL,
+  payloadSecret: process.env.PAYLOAD_SECRET || 'development-secret',
+  awsRegion: process.env.AWS_REGION,
+  awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID ? 'SET' : 'NOT_SET',
+  awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ? 'SET' : 'NOT_SET'
+});
     try {
       // Save the uploaded file temporarily
       const tempFilePath = path.join(__dirname, '../../../uploads', `${req.file.filename}.tmp`);

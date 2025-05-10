@@ -3,7 +3,7 @@ const express = require('express');
 require('dotenv').config();
 
 // Import your config
-const payloadConfig = require('./config/payload.config').default;
+const payloadConfig = require('./config/payload.config');
 
 async function start() {
   // Initialize Payload CMS

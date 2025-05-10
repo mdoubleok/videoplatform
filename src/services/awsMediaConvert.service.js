@@ -2,6 +2,12 @@ const { getPayloadClient } = require('payload');
 require('dotenv').config();
 
 // Initialize AWS MediaConvert client
+// Add debug logging for AWS service initialization
+console.log('Initializing AWSService with:', {
+  awsRegion: process.env.AWS_REGION,
+  awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID ? 'SET' : 'NOT_SET',
+  awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ? 'SET' : 'NOT_SET'
+});
 const AWS = require('aws-sdk');
 const mediaConvert = new AWS.MediaConvert({
   region: process.env.AWS_REGION || 'us-east-1',

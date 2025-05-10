@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname)));
 
 // Set up Payload CMS
 const { build } = require('@payloadcms/next');
-const payloadConfig = require('./src/config/payload.config.js');
+const payloadConfig = require('./config/payload.config');
 
 
 async function startServer() {

@@ -2,6 +2,12 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
+// Add debug logging for video processing service initialization
+console.log('Initializing VideoProcessingService with:', {
+  tempUploadDir: path.join(__dirname, '../../../uploads'),
+  proxyOutputDir: process.env.PROXY_OUTPUT_DIR || 'public/videos/proxy',
+  thumbnailOutputDir: process.env.THUMBNAIL_OUTPUT_DIR || 'public/thumbnails'
+});
 class VideoProcessingService {
   constructor() {
     // Ensure FFmpeg is installed
@@ -84,4 +90,4 @@ class VideoProcessingService {
   }
 }
 
-module.exports = VideoProcessingService;
+module.exports = VideoProcessingService; 
