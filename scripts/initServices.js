@@ -4,9 +4,9 @@ require('dotenv').config();
 
 // Initialize services directly using absolute paths
 const path = require('path');
-const AWSService = require(path.join(__dirname, 'src', 'services', 'awsMediaConvert.service.js'));
-const VideoProcessingService = require(path.join(__dirname, 'src', 'services', 'videoProcessing.service.js'));
-const VideoStatusService = require(path.join(__dirname, 'src', 'services', 'videoStatus.service.js'));
+const AWSService = require('/home/mdoubleok/videoplatform/scripts/src/services/awsMediaConvert.service.js');
+const VideoProcessingService = require('/home/mdoubleok/videoplatform/src/services/videoProcessing.service.js');
+const VideoStatusService = require('/home/mdoubleok/videoplatform/src/services/videoStatus.service.js');
 
 /**
  * Enhanced service initialization script with proper shutdown/restart handling
